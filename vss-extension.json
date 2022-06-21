@@ -5,6 +5,10 @@
     "version": "VERSION_PLACEHOLDER",
     "name": "tfsec",
     "description": "tfsec uses static analysis of your terraform code to spot potential misconfigurations and help you to resolve them.",
+    "repository": {
+      "type": "git",
+      "uri": "https://github.com/aquasecurity/tfsec-azure-pipelines-task"
+    },
     "public": true,
     "categories": [
         "Azure Pipelines"
