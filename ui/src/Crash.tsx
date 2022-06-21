@@ -14,8 +14,6 @@ export class Crash extends React.Component<CrashProps> {
         this.props = props
     }
 
-    componentDidMount() {}
-
     render() {
         return (
             <MessageCard

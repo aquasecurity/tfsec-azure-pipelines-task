@@ -110,21 +110,21 @@ function compareSeverity(a: string, b: string): number {
 
 const sortFunctions = [
     (item1: ListResult, item2: ListResult): number => {
-        return compareSeverity(item1.severity.text!, item2.severity.text!);
+        return compareSeverity(item1.severity.text, item2.severity.text);
     },
     (item1: ListResult, item2: ListResult): number => {
-        return item1.long_id.text!.localeCompare(item2.long_id.text!);
+        return item1.long_id.text.localeCompare(item2.long_id.text);
     },
     (item1: ListResult, item2: ListResult): number => {
-        return item1.description.text!.localeCompare(item2.description.text!);
+        return item1.description.text.localeCompare(item2.description.text);
     },
     (item1: ListResult, item2: ListResult): number => {
-        return item1.location.text!.localeCompare(item2.location.text!);
+        return item1.location.text.localeCompare(item2.location.text);
     },
     null,
 ];
 
-export class ResultsTable extends React.Component<ResultsTableProps, {}> {
+export class ResultsTable extends React.Component<ResultsTableProps> {
 
     private readonly results: ObservableArray<ListResult> = new ObservableArray<ListResult>([])
 
@@ -151,7 +151,6 @@ export class ResultsTable extends React.Component<ResultsTableProps, {}> {
             (
                 columnIndex: number,
                 proposedSortOrder: SortOrder,
-                event: React.KeyboardEvent<HTMLElement> | React.MouseEvent<HTMLElement>
             ) => {
                 this.results.splice(
                     0,
@@ -182,7 +181,7 @@ export class ResultsTable extends React.Component<ResultsTableProps, {}> {
     }
 }
 
-let severityColours: IColor[] = [
+const severityColours: IColor[] = [
     {red: 0x42, green: 0x89, blue: 0x59},
     {red: 0x2a, green: 0x4f, blue: 0x87},
     {red: 0xf1, green: 0x8f, blue: 0x01},
@@ -194,7 +193,7 @@ function getSeverityColour(s: string): IColor {
     return severityColours[severityToInt(s)]
 }
 
-function renderSeverity(rowIndex: number, columnIndex: number, tableColumn: ITableColumn<ListResult>, tableItem: ListResult, ariaRowIndex?: number): JSX.Element {
+function renderSeverity(rowIndex: number, columnIndex: number, tableColumn: ITableColumn<ListResult>, tableItem: ListResult): JSX.Element {
     return <SimpleTableCell
         columnIndex={columnIndex}
         tableColumn={tableColumn}
@@ -214,7 +213,7 @@ function renderSeverity(rowIndex: number, columnIndex: number, tableColumn: ITab
     </SimpleTableCell>
 }
 
-function renderLocation(rowIndex: number, columnIndex: number, tableColumn: ITableColumn<ListResult>, tableItem: ListResult, ariaRowIndex?: number): JSX.Element {
+function renderLocation(rowIndex: number, columnIndex: number, tableColumn: ITableColumn<ListResult>, tableItem: ListResult): JSX.Element {
     return <SimpleTableCell
         columnIndex={columnIndex}
         tableColumn={tableColumn}
@@ -235,7 +234,7 @@ function convertLocation(loc: CodeLocation): ISimpleListCell {
 }
 
 function convertResults(input: Result[]): ListResult[] {
-    let output: ListResult[] = []
+    const output: ListResult[] = []
     input.forEach(function (result: Result) {
         output.push({
             description: {
