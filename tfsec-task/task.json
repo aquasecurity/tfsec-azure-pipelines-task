@@ -27,6 +27,14 @@
             "helpMarkDown": "Enable debug logging in build output"
         },
         {
+            "name": "publishTestResults",
+            "type": "boolean",
+            "label": "Publish test results",
+            "defaultValue": "true",
+            "required": false,
+            "helpMarkDown": "Publish results in the Azure Pipelines 'Tests' tab."
+        },
+        {
             "name": "args",
             "type": "string",
             "label": "Extra arguments",

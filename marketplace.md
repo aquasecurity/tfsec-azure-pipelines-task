@@ -52,6 +52,15 @@ Run a specific version of tfsec.
     dir: ./terraform
 ```
 
+### Skip publishing test results
+
+Avoid results showing the in 'Tests' tab of the Pipelines UI.
+
+```yaml
+- task: tfsec@1
+  inputs:
+    publishTestResults: false
+```
 
 ### Informational only
 
