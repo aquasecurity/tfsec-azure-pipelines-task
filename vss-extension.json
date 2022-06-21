@@ -49,6 +49,10 @@
         {
             "path": "screenshot.png",
             "addressable": true
+        },
+        {
+            "path": "images/tfsec.png",
+            "addressable": true
         }
     ],
     "content": {
