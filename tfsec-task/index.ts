@@ -40,7 +40,12 @@ async function run() {
         }
         runner.arg(["-f", "junit,json"]);
         runner.arg(["-O", outputPath]);
-        runner.arg(task.cwd());
+        let dir = task.getInput("dir", false)
+        if(dir !== undefined) {
+            runner.arg(dir)
+        }else {
+            runner.arg(task.cwd());
+        }
 
         console.log("Running tfsec...")
         let result = runner.execSync();

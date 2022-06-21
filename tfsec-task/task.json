@@ -33,6 +33,14 @@
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "Any extra command line arguments to supply to tfsec"
+        },
+        {
+            "name": "dir",
+            "type": "string",
+            "label": "The directory to scan",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The specified directory will be scanned for problems"
         }
     ],
     "execution": {

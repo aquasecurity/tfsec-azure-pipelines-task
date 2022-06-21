@@ -44,6 +44,15 @@ Run a specific version of tfsec.
     args: --workspace my-workspace --config-file ./tfsec.yml
 ```
 
+### Specify the directory to scan
+
+```yaml
+- task: tfsec@1
+  inputs:
+    dir: ./terraform
+```
+
+
 ### Informational only
 
 If you'd like to see the tfsec results in your build, but avoid causing it to fail when issues are discovered, you can add the `--soft-fail` flag to your command line arguments using:
