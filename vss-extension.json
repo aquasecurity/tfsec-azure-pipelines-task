@@ -1,0 +1,100 @@
+{
+    "manifestVersion": 1,
+    "id": "tfsec-official",
+    "publisher": "AquaSecurityOfficial",
+    "version": "VERSION_PLACEHOLDER",
+    "name": "tfsec",
+    "description": "tfsec uses static analysis of your terraform code to spot potential misconfigurations and help you to resolve them.",
+    "public": false,
+    "categories": [
+        "Azure Pipelines"
+    ],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "tags": [
+        "tfsec",
+        "terraform",
+        "security",
+        "scanner"
+    ],
+    "icons": {
+        "default": "images/extension-icon.png"        
+    },
+    "files": [
+        {
+            "path": "tfsec-task"
+        },
+        {
+            "path": "ui/node_modules/vss-web-extension-sdk/lib",
+            "addressable": true,
+            "packagePath": "lib"
+        },
+        {
+            "path": "LICENSE",
+            "addressable": true
+        },
+        {
+            "path": "ui/build/static",
+            "addressable": true,
+            "packagePath": "static"
+        },
+        {
+            "path": "ui/build/index.html",
+            "addressable": true,
+            "packagePath": "index.html"
+        },
+        {
+            "path": "screenshot.png",
+            "addressable": true
+        }
+    ],
+    "content": {
+        "license": {
+            "path": "LICENSE"
+        },
+        "details": {
+            "path": "marketplace.md"
+        }
+    },
+    "screenshots": [
+        {
+            "path": "screenshot.png"
+        }
+    ],
+    "links": {
+        "home": {
+            "uri": "https://www.aquasec.com/"
+        },
+        "license": {
+            "uri": "./LICENSE"
+        }
+    },
+    "contributions": [
+        {
+            "id": "custom-build-release-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tfsec-task"
+            }
+        },
+        {
+            "id": "tfsec-tab",
+            "type": "ms.vss-build-web.build-results-tab",
+            "description": "Results for tfsec scan",
+            "targets": ["ms.vss-build-web.build-results-view"],
+            "properties": {
+                "name": "tfsec",
+                "uri": "index.html"
+            }
+        }
+    ],
+    "scopes": [
+        "vso.build_execute"
+    ]
+}
