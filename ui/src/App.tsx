@@ -22,14 +22,23 @@ type AppState = {
     sdkReady: boolean
 }
 
-export class App extends React.Component<{}, AppState> {
+interface AppProps {
+    checkInterval: number
+}
+
+export class App extends React.Component<AppProps, AppState> {
 
     private buildClient: BuildRestClient;
     private project: IProjectInfo;
     private buildPageData: IBuildPageData;
+    public props: AppProps;
 
     constructor(props) {
         super(props)
+        if(props.checkInterval == 0) {
+            props.checkInterval = 5000
+        }
+        this.props = props
         this.state = {
             sdkReady: false,
             status: BuildStatus.None,
@@ -42,14 +51,14 @@ export class App extends React.Component<{}, AppState> {
 
     async check() {
 
-        let build = await this.buildClient.getBuild(this.project.id, this.buildPageData.build.id)
+        const build = await this.buildClient.getBuild(this.project.id, this.buildPageData.build.id)
         if ((build.status & BuildStatus.Completed) === 0) {
             this.setState({status: build.status})
-            setTimeout(this.check.bind(this), 5000)
+            setTimeout(this.check.bind(this), this.props.checkInterval)
             return
         }
 
-        let timeline = await this.buildClient.getBuildTimeline(this.project.id, build.id)
+        const timeline = await this.buildClient.getBuildTimeline(this.project.id, build.id)
         let recordId = ""
         timeline.records.forEach(function (record: TimelineRecord) {
             if (record.type == "Task" && record.name == "tfsec") {
@@ -60,14 +69,14 @@ export class App extends React.Component<{}, AppState> {
             this.setState({error: "Timeline record missing: cannot load results. Is tfsec configured to run on this build?"})
             return
         }
-        let attachments = await this.buildClient.getAttachments(this.project.id, build.id, "JSON_RESULT")
+        const attachments = await this.buildClient.getAttachments(this.project.id, build.id, "JSON_RESULT")
         if (attachments.length === 0) {
             this.setState({error: "No attachments found: cannot load results. Did tfsec run properly?"})
             return
         }
-        let attachment = attachments[0];
-        let data = await this.buildClient.getAttachment(this.project.id, build.id, timeline.id, recordId, "JSON_RESULT", attachment.name)
-        let resultSet = this.decodeResultSet(data)
+        const attachment = attachments[0];
+        const data = await this.buildClient.getAttachment(this.project.id, build.id, timeline.id, recordId, "JSON_RESULT", attachment.name)
+        const resultSet = this.decodeResultSet(data)
         this.setState({status: build.status, resultSet: resultSet})
     }
 
@@ -76,12 +85,11 @@ export class App extends React.Component<{}, AppState> {
     }
 
     async componentDidMount() {
-        let comp = this;
-        setTimeout(function () {
-            if (!comp.state.sdkReady) {
-                comp.setError.bind(comp)("Azure DevOps SDK failed to initialise.")
+        setTimeout((function () {
+            if (!this.state.sdkReady) {
+                this.setError("Azure DevOps SDK failed to initialise.")
             }
-        }, 5000)
+        }).bind(this), 5000)
         SDK.init().then(() => {
             SDK.ready().then(async () => {
                 this.setState({sdkReady: true})
@@ -91,8 +99,8 @@ export class App extends React.Component<{}, AppState> {
                 this.project = await projectService.getProject();
                 this.buildClient = API.getClient(BuildRestClient)
                 await this.check()
-            }).catch((e) => comp.setError.bind(comp)("Azure DevOps SDK failed to enter a ready state: " + e))
-        }).catch((e) => comp.setError.bind(comp)("Azure DevOps SDK failed to initialise: " + e))
+            }).catch((e) => this.setError.bind(this)("Azure DevOps SDK failed to enter a ready state: " + e))
+        }).catch((e) => this.setError.bind(this)("Azure DevOps SDK failed to initialise: " + e))
     }
 
     decodeResultSet(buffer: ArrayBuffer): ResultSet {
