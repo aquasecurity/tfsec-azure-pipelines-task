@@ -1,7 +1,7 @@
 import * as os from 'os';
 import * as util from 'util';
 import * as tool from 'azure-pipelines-tool-lib';
-import { ToolRunner } from 'azure-pipelines-task-lib/toolrunner';
+import {ToolRunner} from 'azure-pipelines-task-lib/toolrunner';
 import task = require('azure-pipelines-task-lib/task');
 
 async function run() {
@@ -11,7 +11,7 @@ async function run() {
         let tmpPath = "/tmp/"
         let bin = "tfsec"
         let chmodRequired = true;
-        if(os.platform() == "win32") {
+        if (os.platform() == "win32") {
             tmpPath = "%userprofile%\\AppData\\Local\\Temp\\"
             bin = "tfsec.exe"
             chmodRequired = false;
@@ -21,7 +21,7 @@ async function run() {
 
         console.log("Downloading tfsec...")
         let downloadPath = await tool.downloadTool(url, localPath);
-        if(chmodRequired) {
+        if (chmodRequired) {
             await task.exec('chmod', ["+x", downloadPath]);
         }
 
@@ -30,46 +30,45 @@ async function run() {
         task.rmRF(outputPath);
 
         console.log("Configuring options...")
-        let runner : ToolRunner = task.tool(downloadPath);
+        let runner: ToolRunner = task.tool(downloadPath);
         let args = task.getInput("args", false)
-        if(args !== undefined) {
+        if (args !== undefined) {
             runner.line(args)
         }
-        if(task.getBoolInput("debug", false)) {
+        if (task.getBoolInput("debug", false)) {
             runner.arg("--debug")
         }
         runner.arg(["-f", "junit,json"]);
         runner.arg(["-O", outputPath]);
         let dir = task.getInput("dir", false)
-        if(dir !== undefined) {
+        if (dir !== undefined) {
             runner.arg(dir)
-        }else {
+        } else {
             runner.arg(task.cwd());
         }
 
         console.log("Running tfsec...")
         let result = runner.execSync();
-        if(result.code === 0) {
+        if (result.code === 0) {
             task.setResult(task.TaskResult.Succeeded, "No problems found.")
-        }else{
+        } else {
             task.setResult(task.TaskResult.Failed, "Failed: tfsec detected misconfigurations.")
         }
 
-        console.log("Publishing JUnit results...")
-        const publisher: task.TestPublisher = new task.TestPublisher('JUnit');
-        publisher.publish(outputPath + ".junit", 'true', '', '', "tfsec", 'true', "tfsec");
-
-        if(task.getBoolInput("publishTestResults", false)) {
-            console.log("Publishing JSON results...")
-            task.addAttachment("JSON_RESULT", "results.json", outputPath + ".json")
+        if (task.getBoolInput("publishTestResults", false)) {
+            console.log("Publishing JUnit results...")
+            const publisher: task.TestPublisher = new task.TestPublisher('JUnit');
+            publisher.publish(outputPath + ".junit", 'true', '', '', "tfsec", 'true', "tfsec");
         }
+
+        console.log("Publishing JSON results...")
+        task.addAttachment("JSON_RESULT", "results.json", outputPath + ".json")
 
         console.log("Tidying up...")
         task.rmRF(outputPath);
 
         console.log("Done!");
-    }
-    catch (err: any) {
+    } catch (err: any) {
         task.setResult(task.TaskResult.Failed, err.message);
     }
 }
