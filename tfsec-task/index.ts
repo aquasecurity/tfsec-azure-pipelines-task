@@ -59,8 +59,10 @@ async function run() {
         const publisher: task.TestPublisher = new task.TestPublisher('JUnit');
         publisher.publish(outputPath + ".junit", 'true', '', '', "tfsec", 'true', "tfsec");
 
-        console.log("Publishing JSON results...")
-        task.addAttachment("JSON_RESULT", "results.json", outputPath+".json")
+        if(task.getBoolInput("publishTestResults", false)) {
+            console.log("Publishing JSON results...")
+            task.addAttachment("JSON_RESULT", "results.json", outputPath + ".json")
+        }
 
         console.log("Tidying up...")
         task.rmRF(outputPath);
