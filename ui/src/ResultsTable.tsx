@@ -16,6 +16,7 @@ import {ITableColumn} from "azure-devops-ui/Components/Table/Table.Props";
 import {Pill, PillSize, PillVariant} from "azure-devops-ui/Pill";
 import {PillGroup} from "azure-devops-ui/PillGroup";
 import {IColor} from "azure-devops-ui/Utilities/Color";
+import { ZeroData } from "azure-devops-ui/ZeroData";
 
 interface ResultsTableProps {
     set: ResultSet
@@ -168,6 +169,16 @@ export class ResultsTable extends React.Component<ResultsTableProps> {
 
 
         return (
+            this.results.length == 0 ?
+                <ZeroData
+                    primaryText="Build passed."
+                    secondaryText={
+                        <span>No problems were found within your project.</span>
+                    }
+                    imageAltText="tfsec"
+                    imagePath={require("./images/tfsec.png")}
+                />
+                :
             <Table
                 selectableText={true}
                 ariaLabel="Results Table"
