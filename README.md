@@ -1,6 +1,6 @@
-# tfsec Azure DevOps Pipelines Task
+# tfsec for Azure DevOps
 
-An Azure DevOps Task for [tfsec](https://github.com/aquasecurity/tfsec).
+An Azure DevOps Pipelines Task for [tfsec](https://github.com/aquasecurity/tfsec), with a bonus integrated UI.
 
 ![Screenshot showing the tfsec extension in the Azure Devops UI](screenshot.png)
 

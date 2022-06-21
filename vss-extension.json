@@ -5,7 +5,7 @@
     "version": "VERSION_PLACEHOLDER",
     "name": "tfsec",
     "description": "tfsec uses static analysis of your terraform code to spot potential misconfigurations and help you to resolve them.",
-    "public": false,
+    "public": true,
     "categories": [
         "Azure Pipelines"
     ],
@@ -59,11 +59,6 @@
             "path": "marketplace.md"
         }
     },
-    "screenshots": [
-        {
-            "path": "screenshot.png"
-        }
-    ],
     "links": {
         "home": {
             "uri": "https://www.aquasec.com/"
