@@ -246,26 +246,28 @@ function convertLocation(loc: CodeLocation): ISimpleListCell {
 
 function convertResults(input: Result[]): ListResult[] {
     const output: ListResult[] = []
-    input.forEach(function (result: Result) {
-        output.push({
-            description: {
-                text: result.description,
-            },
-            long_id: {
-                text: result.long_id,
-            },
-            severity: {
-                text: result.severity,
-            },
-            link: {
-                text: result.rule_id.toUpperCase(),
-                href: "https://avd.aquasec.com/misconfig/" + result.rule_id.toLowerCase(),
-                hrefTarget: "_blank",
-                hrefRel: "noopener",
-                iconProps: {iconName: "NavigateExternalInline", ariaLabel: "External Link"}
-            },
-            location: convertLocation(result.location),
+    if(input !== null) {
+        input.forEach(function (result: Result) {
+            output.push({
+                description: {
+                    text: result.description,
+                },
+                long_id: {
+                    text: result.long_id,
+                },
+                severity: {
+                    text: result.severity,
+                },
+                link: {
+                    text: result.rule_id.toUpperCase(),
+                    href: "https://avd.aquasec.com/misconfig/" + result.rule_id.toLowerCase(),
+                    hrefTarget: "_blank",
+                    hrefRel: "noopener",
+                    iconProps: {iconName: "NavigateExternalInline", ariaLabel: "External Link"}
+                },
+                location: convertLocation(result.location),
+            })
         })
-    })
+    }
     return output
 }
