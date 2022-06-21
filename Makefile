@@ -6,8 +6,8 @@ clean:
 
 .PHONY: lint
 lint:
-	cd tfsec-task && npm run lint
-	cd ui && npm run lint
+	cd ui && npm install -f && npm run lint
+	cd tfsec-task && npm install -f && npm run lint
 
 .PHONY: build
 build: clean lint
