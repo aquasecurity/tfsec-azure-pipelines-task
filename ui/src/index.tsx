@@ -5,7 +5,7 @@ import {App} from "./App"
 
 ReactDOM.render(
     <SurfaceContext.Provider value={{ background: SurfaceBackground.neutral }}>
-        <App />
+        <App checkInterval={5000}/>
     </SurfaceContext.Provider>,
     document.getElementById("root"),
 )

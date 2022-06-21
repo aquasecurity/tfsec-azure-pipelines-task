@@ -176,7 +176,7 @@ export class ResultsTable extends React.Component<ResultsTableProps> {
                         <span>No problems were found within your project.</span>
                     }
                     imageAltText="tfsec"
-                    imagePath={require("./images/tfsec.png")}
+                    imagePath={"images/tfsec.png"}
                 />
                 :
             <Table
