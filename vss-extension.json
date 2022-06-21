@@ -52,7 +52,8 @@
         },
         {
             "path": "images/tfsec.png",
-            "addressable": true
+            "addressable": true,
+            "packagePath": "images/tfsec.png"
         }
     ],
     "content": {
