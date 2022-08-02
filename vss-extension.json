@@ -94,7 +94,8 @@
             "targets": ["ms.vss-build-web.build-results-view"],
             "properties": {
                 "name": "tfsec",
-                "uri": "index.html"
+                "uri": "index.html",
+                "supportsTasks": ["c4d1b8a0-2ef3-4ed7-86ae-a83946199e82"]
             }
         }
     ],
