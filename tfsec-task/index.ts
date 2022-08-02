@@ -12,7 +12,7 @@ async function run() {
         let bin = "tfsec"
         let chmodRequired = true;
         if (os.platform() == "win32") {
-            tmpPath = "%userprofile%\\AppData\\Local\\Temp\\"
+            tmpPath = process.env["USERPROFILE"] + "\\AppData\\Local\\Temp\\"
             bin = "tfsec.exe"
             chmodRequired = false;
         }
