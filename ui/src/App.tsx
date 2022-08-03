@@ -54,8 +54,6 @@ export class App extends React.Component<AppProps, AppState> {
         const build = await this.buildClient.getBuild(this.project.id, this.buildPageData.build.id)
         // if the build isn't running/finished, try again shortly
         if ((build.status & BuildStatus.Completed) === 0 && (build.status & BuildStatus.InProgress) === 0) {
-            console.log("build is pending")
-            console.log(build.status)
             this.setState({status: TimelineRecordState.Pending})
             setTimeout(this.check.bind(this), this.props.checkInterval)
             return
@@ -64,21 +62,16 @@ export class App extends React.Component<AppProps, AppState> {
         let recordId = ""
         let recordState: TimelineRecordState;
         timeline.records.forEach(function (record: TimelineRecord) {
-            console.log(record.name)
-            console.log(record)
             if (record.type == "Task" && record.name == "tfsec") {
                 recordId = record.id
                 recordState = record.state
             }
         })
         if (recordId === "") {
-            console.log("awaiting record id...")
             setTimeout(this.check.bind(this), this.props.checkInterval)
             return
         }
         if (recordState !== TimelineRecordState.Completed) {
-            console.log("waiting for task to complete")
-            console.log(recordState)
             this.setState({status: recordState})
             setTimeout(this.check.bind(this), this.props.checkInterval)
             return
