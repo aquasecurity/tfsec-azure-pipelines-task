@@ -62,7 +62,7 @@ export class App extends React.Component<AppProps, AppState> {
         let recordId = ""
         let recordState: TimelineRecordState;
         timeline.records.forEach(function (record: TimelineRecord) {
-            if (record.type == "Task" && record.name == "tfsec") {
+            if (record.type == "Task" && record.task !== null && record.task.name == "tfsec") {
                 recordId = record.id
                 recordState = record.state
             }
