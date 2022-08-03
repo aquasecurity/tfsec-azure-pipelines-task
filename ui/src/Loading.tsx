@@ -1,9 +1,10 @@
 import * as React from 'react';
 import {BuildStatus} from "azure-devops-extension-api/Build";
 import {Spinner, SpinnerSize} from "azure-devops-ui/Spinner";
+import {TimelineRecordState} from "azure-devops-extension-api/Build/Build";
 
 interface LoadingProps {
-    status: BuildStatus
+    status: TimelineRecordState
 }
 
 export class Loading extends React.Component<LoadingProps> {
@@ -17,16 +18,12 @@ export class Loading extends React.Component<LoadingProps> {
 
     getMessage(): string {
         switch (this.props.status) {
-            case BuildStatus.None:
-                return "Initialising..."
-            case BuildStatus.Cancelling:
-                return "Cancelling build..."
-            case BuildStatus.InProgress:
-                return "Waiting for build to complete..."
-            case BuildStatus.NotStarted:
-                return "Waiting for build to start..."
-            case BuildStatus.Postponed:
-                return "Build postponed, waiting..."
+            case TimelineRecordState.Pending:
+                return "Pending..."
+            case TimelineRecordState.InProgress:
+                return "Waiting for scan to complete..."
+            case TimelineRecordState.Completed:
+                return "Success!"
         }
         return "Loading..."
     }

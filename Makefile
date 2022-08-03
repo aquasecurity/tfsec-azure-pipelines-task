@@ -17,3 +17,7 @@ build: clean
 .PHONY: package
 package: build
 	tfx extension create --manifest-globs vss-extension.json
+
+.PHONY: package-dev
+package-dev: build
+	tfx extension create --manifest-globs vss-extension.dev.json

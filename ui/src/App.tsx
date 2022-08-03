@@ -9,14 +9,14 @@ import {
 import * as SDK from "azure-devops-extension-sdk";
 import * as API from "azure-devops-extension-api";
 import {CommonServiceIds, IProjectInfo, IProjectPageService} from "azure-devops-extension-api";
-import {TimelineRecord} from "azure-devops-extension-api/Build/Build";
+import {TimelineRecord, TimelineRecordState} from "azure-devops-extension-api/Build/Build";
 import {ResultSet} from './tfsec'
 import {Loading} from './Loading'
 import {ResultsTable} from './ResultsTable'
 import {Crash} from './Crash'
 
 type AppState = {
-    status: BuildStatus
+    status: TimelineRecordState
     error: string
     resultSet: ResultSet
     sdkReady: boolean
@@ -41,7 +41,7 @@ export class App extends React.Component<AppProps, AppState> {
         this.props = props
         this.state = {
             sdkReady: false,
-            status: BuildStatus.None,
+            status: TimelineRecordState.Pending,
             error: "",
             resultSet: {
                 results: []
@@ -52,21 +52,35 @@ export class App extends React.Component<AppProps, AppState> {
     async check() {
 
         const build = await this.buildClient.getBuild(this.project.id, this.buildPageData.build.id)
-        if ((build.status & BuildStatus.Completed) === 0) {
-            this.setState({status: build.status})
+        // if the build isn't running/finished, try again shortly
+        if ((build.status & BuildStatus.Completed) === 0 && (build.status & BuildStatus.InProgress) === 0) {
+            console.log("build is pending")
+            console.log(build.status)
+            this.setState({status: TimelineRecordState.Pending})
             setTimeout(this.check.bind(this), this.props.checkInterval)
             return
         }
-
         const timeline = await this.buildClient.getBuildTimeline(this.project.id, build.id)
         let recordId = ""
+        let recordState: TimelineRecordState;
         timeline.records.forEach(function (record: TimelineRecord) {
+            console.log(record.name)
+            console.log(record)
             if (record.type == "Task" && record.name == "tfsec") {
                 recordId = record.id
+                recordState = record.state
             }
         })
         if (recordId === "") {
-            this.setState({error: "Timeline record missing: cannot load results. Is tfsec configured to run on this build?"})
+            console.log("awaiting record id...")
+            setTimeout(this.check.bind(this), this.props.checkInterval)
+            return
+        }
+        if (recordState !== TimelineRecordState.Completed) {
+            console.log("waiting for task to complete")
+            console.log(recordState)
+            this.setState({status: recordState})
+            setTimeout(this.check.bind(this), this.props.checkInterval)
             return
         }
         const attachments = await this.buildClient.getAttachments(this.project.id, build.id, "JSON_RESULT")
@@ -77,7 +91,7 @@ export class App extends React.Component<AppProps, AppState> {
         const attachment = attachments[0];
         const data = await this.buildClient.getAttachment(this.project.id, build.id, timeline.id, recordId, "JSON_RESULT", attachment.name)
         const resultSet = this.decodeResultSet(data)
-        this.setState({status: build.status, resultSet: resultSet})
+        this.setState({status: recordState, resultSet: resultSet})
     }
 
     setError(msg: string) {
@@ -116,7 +130,7 @@ export class App extends React.Component<AppProps, AppState> {
     // render will know everything!
     render() {
         return (
-            this.state.status == BuildStatus.Completed ?
+            this.state.status == TimelineRecordState.Completed ?
                 <ResultsTable set={this.state.resultSet}/>
                 :
                 (this.state.error !== "" ?
