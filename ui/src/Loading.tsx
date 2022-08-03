@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {BuildStatus} from "azure-devops-extension-api/Build";
 import {Spinner, SpinnerSize} from "azure-devops-ui/Spinner";
 import {TimelineRecordState} from "azure-devops-extension-api/Build/Build";
 
