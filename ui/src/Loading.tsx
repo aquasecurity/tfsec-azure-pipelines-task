@@ -18,11 +18,11 @@ export class Loading extends React.Component<LoadingProps> {
     getMessage(): string {
         switch (this.props.status) {
             case TimelineRecordState.Pending:
-                return "Pending..."
+                return "Loading..."
             case TimelineRecordState.InProgress:
                 return "Waiting for scan to complete..."
             case TimelineRecordState.Completed:
-                return "Success!"
+                return "Scan complete!"
         }
         return "Loading..."
     }
