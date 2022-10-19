@@ -51,6 +51,13 @@ Run a specific version of tfsec.
   inputs:
     dir: ./terraform
 ```
+### Specify the directory to download tfsec binnary and store resuls files on Linux agents, Default is /tmp/
+
+```yaml
+- task: tfsec@1
+  inputs:
+    tmpPath: /tmp/
+```
 
 ### Skip publishing test results
 

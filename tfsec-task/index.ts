@@ -8,7 +8,7 @@ async function run() {
     try {
         console.log("Finding correct tfsec version...")
         let url = await getArtifactURL()
-        let tmpPath = "/tmp/"
+        let tmpPath = task.getInput("tmpPath", true)
         let bin = "tfsec"
         let chmodRequired = true;
         if (os.platform() == "win32") {
