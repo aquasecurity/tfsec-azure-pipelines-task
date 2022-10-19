@@ -49,6 +49,14 @@
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "The specified directory will be scanned for problems"
+        },
+        {
+            "name": "tmpPath",
+            "type": "string",
+            "label": "The directory to download tfsec and store results files on Linux agents",
+            "defaultValue": "/tmp/",
+            "required": false,
+            "helpMarkDown": "The specified directory will used to download tfsec binary and store results files on Linux agents"
         }
     ],
     "execution": {
